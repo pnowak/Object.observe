@@ -1,7 +1,11 @@
-export class Observe {
-    constructor(target) {
+const mandatory = (parameter) => {
+    throw new Error(`The ${parameter} parameter is mandatory`);
+};
 
-        const changes = ['add', 'update', 'delete', 'reconfigure', 'setPrototype', 'preventExtensions'];
+export class Observe {
+    constructor(target, fn = mandatory('callback'), changes = ['add', 'update', 'delete', 'reconfigure', 'setPrototype', 'preventExtensions']) {
+
+        this.changes = changes;
 
         const baseDescriptor = {
             configurable: false,
@@ -16,7 +20,6 @@ export class Observe {
 
     get(target, key, context) {
         if (Reflect.has(target, key)) {
-            console.log();
             return Reflect.get(target, key, context);
         }
         else {
@@ -26,36 +29,28 @@ export class Observe {
 
     set(target, key, value, context) {
         if (Reflect.has( target, key )) {
-            console.log();
+            console.log({ name: key, object: JSON.stringify(target), type: 'update', oldValue: target[key] });
             return Reflect.set(target, key, value, context);
         }
         else {
-            throw new ReferenceError(`${key} doesnt exist`);
+            console.log({ name: key, object: JSON.stringify(target), type: 'add' });
+            return Reflect.set(target, key, value, context);
         }
     }
 
-    delete(target, key) {
-        console.log({name: target[key], object: target, type: 'delete', oldValue: key});
+    deleteProperty(target, key) {
+        console.log({ name: key, object: JSON.stringify(target), type: 'delete', oldValue: target[key] });
         return Reflect.deleteProperty(target, key);
     }
 
     defineProperty(target, key, desc) {
+        console.log({name: key, object: JSON.stringify(target), type: 'reconfigure', descriptor: JSON.stringify(desc) });
         return Reflect.defineProperty(target, key, desc);
     }
 
-    getOwnPropertyDescriptor(target, key) {
-        console.log()
-        return Reflect.getOwnPropertyDescriptor(target, key);
-    }
-
     setPrototypeOf(target, proto) {
+        console.log({ name: JSON.stringify(proto), object: JSON.stringify(target), type: 'setPrototype', oldValue: JSON.stringify(target) });
         return Reflect.setPrototypeOf(target, proto);
-    }
-
-    *[Symbol.iterator]() {
-        for (let i = 0; i < this.length; i += 1) {
-            yield this.get(i);
-        }
     }
 }
 
@@ -65,7 +60,3 @@ Reflect.defineProperty(Observe.prototype, Symbol.toStringTag, {
     enumerable: false,
     value: 'Observe',
 });
-
-export default function oberve(target) {
-    return new Observe(target);
-}
