@@ -1,15 +1,28 @@
 'use strict';
 
-const mandatory = (parameter) => {
-    throw new Error(`The ${parameter} parameter is mandatory`);
-};
+/*
+The properties of these change objects are:
+name: The name of the property which was changed.
+object: The changed object after the change was made.
+type: A string indicating the type of change taking place.
+oldValue: Only for "update" and "delete" types. The value before the change
+*/
+
+const change = { name, object, type, oldValue };
 
 export class Observe {
-    constructor(target, fn = mandatory('callback'), changes = ['add', 'update', 'delete', 'reconfigure', 'setPrototype', 'preventExtensions']) {
+    constructor(target, fn = callback(change), ...acceptList) {
 
+        //The function called each time changes are made
         this.fn = fn;
-        
-        return new Proxy(target, this);
+
+        //The list of types of changes to be observed on the given object for the given callback. 
+        //Default ["add", "update", "delete", "reconfigure", "setPrototype", "preventExtensions"]
+        this.acceptList = acceptList;
+
+        if (!this.acceptList) {
+            return new Proxy(target, this);
+        }
     }
 
     get(target, key, context) {
