@@ -28,6 +28,7 @@ export class Observe {
     get(target, key, context) {
         if (Reflect.has(target, key)) {
             this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'get' }]);
+
             return Reflect.get(target, key, context);
 
         } else {
@@ -38,10 +39,12 @@ export class Observe {
     set(target, key, value, context) {
         if (Reflect.has( target, key )) {
             this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'update', oldValue: target[key] }]);
+
             return Reflect.set(target, key, value, context);
-            
+
         } else {
             this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'add' }]);
+
             return Reflect.set(target, key, value, context);
         }
     }
