@@ -63,7 +63,6 @@ export class Observe {
 
     setPrototypeOf(target, proto) {
         this.fn.apply(this, [{ name: JSON.stringify(proto), object: JSON.stringify(target), type: 'setPrototype', oldValue: JSON.stringify(target) }]);
-
         return Reflect.setPrototypeOf(target, proto);
     }
 }
