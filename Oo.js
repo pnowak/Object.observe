@@ -51,13 +51,11 @@ export class Observe {
 
     deleteProperty(target, key) {
         this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'delete', oldValue: target[key] }]);
-
         return Reflect.deleteProperty(target, key);
     }
 
     defineProperty(target, key, desc) {
         this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'reconfigure', descriptor: JSON.stringify(desc) }]);
-
         return Reflect.defineProperty(target, key, desc);
     }
 
