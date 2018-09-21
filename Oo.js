@@ -29,8 +29,8 @@ export class Observe {
         if (Reflect.has(target, key)) {
             this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'get' }]);
             return Reflect.get(target, key, context);
-
-        } else {
+        }
+        else {
             throw new ReferenceError(`${key} doesnt exist`);
         }
     }
@@ -39,7 +39,6 @@ export class Observe {
         if (Reflect.has( target, key )) {
             this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'update', oldValue: target[key] }]);
             return Reflect.set(target, key, value, context);
-            
         } else {
             this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'add' }]);
             return Reflect.set(target, key, value, context);
