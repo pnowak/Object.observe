@@ -16,7 +16,7 @@ export class Observe {
         //The function called each time changes are made
         this.fn = fn;
 
-        //The list of types of changes to be observed on the given object for the given callback. 
+        //The list of types of changes to be observed on the given object for the given callback.
         //Default ["add", "update", "delete", "reconfigure", "setPrototype", "preventExtensions"]
         this.acceptList = acceptList;
 
@@ -27,7 +27,7 @@ export class Observe {
 
     get(target, key, context) {
         if (Reflect.has(target, key)) {
-            this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'check' }]);
+            this.fn.apply(this, [{ name: key, object: JSON.stringify(target), type: 'get' }]);
             return Reflect.get(target, key, context);
         }
         else {
