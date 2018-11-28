@@ -1,11 +1,11 @@
 'use strict';
 
 /*
-The properties of these change object are:
+The properties of these change objects are:
 name: The name of the property which was changed.
 object: The changed object after the change was made.
 type: A string indicating the type of change taking place.
-oldValue: Only for "update" and "delete" types. The value before the change.
+oldValue: Only for "update" and "delete" types. The value before the change
 */
 
 const change = { name, object, type, oldValue };
